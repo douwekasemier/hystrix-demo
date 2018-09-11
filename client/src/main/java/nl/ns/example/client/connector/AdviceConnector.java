@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 
 @Component
 public class AdviceConnector {
+    static final String URL = "http://localhost:8099/advice?from={from}&to={to}";
 
-    public static final String URL = "http://localhost:8099/advice?from={from}&to={to}";
-    public static final int READ_TIMEOUT = 4000;
-    public static final int CONNECT_TIMEOUT = 4000;
+    private static final int READ_TIMEOUT = 4000;
+    private static final int CONNECT_TIMEOUT = 4000;
 
-    private RestTemplate restTemplate;
+    RestTemplate restTemplate;
 
     public AdviceConnector() {
         final HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
@@ -32,7 +32,7 @@ public class AdviceConnector {
             travelAdvice.setTime(LocalDateTime.now());
 
             return travelAdvice;
-        } catch( RestClientException e ) {
+        } catch (RestClientException e) {
             throw new AdviceException("REST_CLIENT_EXCEPTION", e.getMessage(), e);
         }
     }

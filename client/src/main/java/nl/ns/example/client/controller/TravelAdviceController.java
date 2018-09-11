@@ -1,6 +1,6 @@
 package nl.ns.example.client.controller;
 
-import nl.ns.example.client.betterconnector.CircuitBreakerAdviceConnector;
+import nl.ns.example.client.connector.AdviceConnector;
 import nl.ns.example.client.domain.AdviceError;
 import nl.ns.example.client.domain.AdviceException;
 import nl.ns.example.client.domain.TravelAdvice;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TravelAdviceController {
 
-    private final CircuitBreakerAdviceConnector travelAdviceConnector;
+    private final AdviceConnector adviceConnector;
     private int openConnections;
 
     @Autowired
-    public TravelAdviceController(CircuitBreakerAdviceConnector travelAdviceConnector) {
-        this.travelAdviceConnector = travelAdviceConnector;
+    public TravelAdviceController(AdviceConnector adviceConnector) {
+        this.adviceConnector = adviceConnector;
     }
 
     @RequestMapping("/plan")
@@ -41,7 +41,7 @@ public class TravelAdviceController {
         try {
             openConnections++;
             System.out.println(String.format("[BEFORE GET ADVICE] Open connections: %d", openConnections));
-            return travelAdviceConnector.getAdvice(from, to);
+            return adviceConnector.getAdvice(from, to);
         } finally {
             openConnections--;
             System.out.println(String.format("[AFTER GET ADVICE] Open connections: %d", openConnections));
