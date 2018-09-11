@@ -1,8 +1,10 @@
 package nl.ns.example.client.connector;
 
+import nl.ns.example.client.domain.AdviceException;
 import nl.ns.example.client.domain.TravelAdvice;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -25,9 +27,13 @@ public class AdviceConnector {
     }
 
     public TravelAdvice getAdvice(String from, String to) {
-        final TravelAdvice travelAdvice = restTemplate.getForObject(URL, TravelAdvice.class, from, to);
-        travelAdvice.setTime(LocalDateTime.now());
+        try {
+            final TravelAdvice travelAdvice = restTemplate.getForObject(URL, TravelAdvice.class, from, to);
+            travelAdvice.setTime(LocalDateTime.now());
 
-        return travelAdvice;
+            return travelAdvice;
+        } catch( RestClientException e ) {
+            throw new AdviceException("REST_CLIENT_EXCEPTION", e.getMessage(), e);
+        }
     }
 }

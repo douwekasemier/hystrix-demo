@@ -1,5 +1,7 @@
 package nl.ns.example.client.betterconnector;
 
+import com.netflix.hystrix.exception.HystrixRuntimeException;
+import nl.ns.example.client.domain.AdviceException;
 import nl.ns.example.client.domain.TravelAdvice;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -25,10 +27,14 @@ public class CircuitBreakerAdviceConnector {
     }
 
     public TravelAdvice getAdvice(String from, String to) {
-        final GetAdviceCommand command = new GetAdviceCommand(restTemplate, URL, from, to);
-        final TravelAdvice travelAdvice = command.execute();
-        travelAdvice.setTime(LocalDateTime.now());
+        try {
+            final GetAdviceCommand command = new GetAdviceCommand(restTemplate, URL, from, to);
+            final TravelAdvice travelAdvice = command.execute();
+            travelAdvice.setTime(LocalDateTime.now());
 
-        return travelAdvice;
+            return travelAdvice;
+        } catch (HystrixRuntimeException e) {
+            throw new AdviceException(e.getFailureType().toString(), e.getMessage(), e);
+        }
     }
 }

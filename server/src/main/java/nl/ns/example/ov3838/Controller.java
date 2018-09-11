@@ -15,16 +15,19 @@ public class Controller {
     public Advice advice(@RequestParam String from, @RequestParam String to) {
 
         try {
+            // Either fast
             if (Math.random() < 0.5) {
-                Thread.sleep(1000);
-            } else {
-                Thread.sleep(10000);
+                Thread.sleep(500);
+            } // Or slow
+            else {
+                Thread.sleep(5000);
             }
         } catch (InterruptedException e) {
             throw new ServerOnFireException("Route calculation timeout", e);
         }
 
-        if (Math.random() > 0.5) {
+        // And sometimes things fail for no apparent reason..
+        if (Math.random() > 0.75) {
             throw new ServerOnFireException("Unknown error of randomness");
         }
 

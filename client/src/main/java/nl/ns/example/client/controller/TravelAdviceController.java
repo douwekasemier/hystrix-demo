@@ -1,11 +1,12 @@
 package nl.ns.example.client.controller;
 
 import nl.ns.example.client.betterconnector.CircuitBreakerAdviceConnector;
+import nl.ns.example.client.domain.AdviceError;
+import nl.ns.example.client.domain.AdviceException;
 import nl.ns.example.client.domain.TravelAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TravelAdviceController {
@@ -26,6 +27,14 @@ public class TravelAdviceController {
         advice.setPrice(9600);
 
         return advice;
+    }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(AdviceException.class)
+    public AdviceError exceptionHandler(AdviceException exception) {
+        System.err.println("[" + exception.getErrorType() + "] " + exception.getMessage());
+
+        return exception.toError();
     }
 
     private TravelAdvice getTravelAdvice(@RequestParam String from, @RequestParam String to) {
