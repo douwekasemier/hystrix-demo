@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class AdviceConnector {
     static final String URL = "http://localhost:8099/advice?from={from}&to={to}";
 
-    private static final int READ_TIMEOUT = 4000;
-    private static final int CONNECT_TIMEOUT = 4000;
+    private static final int READ_TIMEOUT = 1000;
+    private static final int CONNECT_TIMEOUT = 1000;
 
     RestTemplate restTemplate;
 
@@ -23,7 +23,7 @@ public class AdviceConnector {
         requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
         requestFactory.setReadTimeout(READ_TIMEOUT);
 
-        restTemplate = new RestTemplate();
+        restTemplate = new RestTemplate(requestFactory);
     }
 
     public TravelAdvice getAdvice(String from, String to) {
