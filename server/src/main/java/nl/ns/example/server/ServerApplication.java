@@ -1,11 +1,11 @@
-package nl.ns.example.ov3838;
+package nl.ns.example.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class ServerApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(ServerApplication.class, args);
 	}
 }

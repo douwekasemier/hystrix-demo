@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>nl.ns.example</groupId>
-	<artifactId>ov3838</artifactId>
+	<artifactId>crappyservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>ov3838</name>
-	<description>Demo project for Spring Boot</description>
+	<name>crappyservice</name>
+	<description>A Very Crappy OV Planner</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

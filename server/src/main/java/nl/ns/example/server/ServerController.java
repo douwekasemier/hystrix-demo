@@ -1,4 +1,4 @@
-package nl.ns.example.ov3838;
+package nl.ns.example.server;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-public class Controller {
+public class ServerController {
 
     private final AtomicLong counter = new AtomicLong();
 
@@ -26,7 +26,7 @@ public class Controller {
             throw new ServerOnFireException("Route calculation timeout", e);
         }
 
-        // And sometimes things fail for no apparent reason..
+        // And sometimwes things fail for no apparent reason..
         if (Math.random() > 0.75) {
             throw new ServerOnFireException("Unknown error of randomness");
         }

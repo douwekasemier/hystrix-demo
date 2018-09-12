@@ -1,4 +1,4 @@
-package nl.ns.example.ov3838;
+package nl.ns.example.server;
 
 public class Advice {
     private final long id;

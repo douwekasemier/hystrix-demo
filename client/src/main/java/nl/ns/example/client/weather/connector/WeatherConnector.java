@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 @Component
 public class WeatherConnector {
 
-    public WeatherConnector() {
-        HystrixRequestContext context = HystrixRequestContext.initializeContext();
-    }
+    public WeatherConnector() { }
 
     public WeatherReport getWeather(String location) {
         final GetWeatherCommand command = new GetWeatherCommand(location, LocalDateTime.now());
