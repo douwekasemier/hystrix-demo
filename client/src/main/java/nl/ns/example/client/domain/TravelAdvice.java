@@ -2,10 +2,20 @@ package nl.ns.example.client.domain;
 
 import java.time.LocalDateTime;
 
+@SuppressWarnings("ALL")
 public class TravelAdvice {
-    public String route;
-    public LocalDateTime time;
-    public int price;
+    private int id;
+    private String route;
+    private LocalDateTime time;
+    private WeatherReport weather;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getRoute() {
         return route;
@@ -23,11 +33,21 @@ public class TravelAdvice {
         this.time = time;
     }
 
-    public int getPrice() {
-        return price;
+    public WeatherReport getWeather() {
+        return weather;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setWeather(WeatherReport weather) {
+        this.weather = weather;
+    }
+
+    @Override
+    public String toString() {
+        return "TravelAdvice{" +
+                "id=" + id +
+                ", route='" + route + '\'' +
+                ", time=" + time +
+                ", weather=" + weather +
+                '}';
     }
 }

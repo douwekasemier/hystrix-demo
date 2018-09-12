@@ -1,10 +1,11 @@
 package nl.ns.example.client.controller;
 
-import nl.ns.example.client.connector.AdviceConnector;
 import nl.ns.example.client.domain.AdviceError;
 import nl.ns.example.client.domain.AdviceException;
 import nl.ns.example.client.domain.TravelAdvice;
+import nl.ns.example.client.domain.WeatherReport;
 import nl.ns.example.client.improved.connector.CircuitBreakerAdviceConnector;
+import nl.ns.example.client.weather.connector.WeatherConnector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +18,21 @@ import static java.lang.String.format;
 
 @SuppressWarnings("Duplicates")
 @RestController
-public class TravelAdviceController {
+public class TravelAdviceV2Controller {
 
-    private final AdviceConnector adviceConnector;
+    private final CircuitBreakerAdviceConnector adviceConnector;
+    private final WeatherConnector weatherConnector;
+
     private final AtomicLong counter = new AtomicLong();
     private final AtomicLong openConnections = new AtomicLong();
 
     @Autowired
-    public TravelAdviceController(AdviceConnector adviceConnector) {
+    public TravelAdviceV2Controller(CircuitBreakerAdviceConnector adviceConnector, WeatherConnector weatherConnector) {
         this.adviceConnector = adviceConnector;
+        this.weatherConnector = weatherConnector;
     }
 
-    @RequestMapping("/plan")
+    @RequestMapping("/v2/plan")
     public TravelAdvice plan(@RequestParam String from, @RequestParam String to) {
         final long requestId = counter.incrementAndGet();
 
@@ -60,7 +64,11 @@ public class TravelAdviceController {
         System.out.println(format("<%d> [Before getAdvice] Open connections: %d", requestId, openConnections.incrementAndGet()));
 
         try {
-            return adviceConnector.getAdvice(from, to);
+            final TravelAdvice travelAdvice = adviceConnector.getAdvice(from, to);
+            final WeatherReport weatherReport = weatherConnector.getWeather(to);
+
+            travelAdvice.setWeather(weatherReport);
+            return travelAdvice;
         } finally {
             final LocalDateTime finish = LocalDateTime.now();
             final long duration = ChronoUnit.MILLIS.between(start, finish);
